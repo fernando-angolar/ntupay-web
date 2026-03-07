@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { registerUser } from '../api/userApi'
 import type { UserRegistrationRequest } from '../types'
 
@@ -8,24 +8,30 @@ const initialState: UserRegistrationRequest = {
   phone: '',
   password: '',
   confirmPassword: '',
-  accountType: 'MERCHANT'
+  accountType: 'MERCHANT',
 }
 
-export function RegisterFrom() {
+export function RegisterForm() {
   const [form, setForm] = useState<UserRegistrationRequest>(initialState)
-  const [message, setMessage] = useState<String>('') 
-  const [error, setError] = useState<String>('') 
-  const [loading, setloading] = useState<boolean>(false) 
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm((previous) => ({ ...previous, [event.target.name]: event.target.value}))
+    setForm((previous) => ({ ...previous, [event.target.name]: event.target.value }))
   }
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setMessage(''),
-    setError(''),
-    setloading(true)
+    setMessage('')
+    setError('')
+
+    if (form.password !== form.confirmPassword) {
+      setError('A senha e a confirmação devem ser iguais.')
+      return
+    }
+
+    setLoading(true)
 
     try {
       const response = await registerUser(form)
@@ -34,7 +40,7 @@ export function RegisterFrom() {
     } catch (requestError) {
       setError((requestError as Error).message)
     } finally {
-      setloading(false)
+      setLoading(false)
     }
   }
 
@@ -51,9 +57,18 @@ export function RegisterFrom() {
         <option value="PARTNER">Partner</option>
       </select>
       <input name="password" type="password" placeholder="Senha" value={form.password} onChange={onChange} required />
-      <input name="confirmPassword" type="password" placeholder="Confirmar senha" value={form.confirmPassword} onChange={onChange} required />
+      <input
+        name="confirmPassword"
+        type="password"
+        placeholder="Confirmar senha"
+        value={form.confirmPassword}
+        onChange={onChange}
+        required
+      />
 
-      <button disabled={loading} type="submit">{loading ? 'A criar...' : 'Criar Conta'}</button>
+      <button disabled={loading} type="submit">
+        {loading ? 'A criar...' : 'Criar Conta'}
+      </button>
       {message && <span className="success">{message}</span>}
       {error && <span className="error">{error}</span>}
     </form>

@@ -1,9 +1,9 @@
-import { RegisterFrom } from "../components/RegisterFrom";
+import { RegisterForm } from "../components/RegisterForm";
 
 export function RegisterPage() {
   return (
     <main className="container">
-      <RegisterFrom />
+      <RegisterForm />
     </main>
   )
 }
