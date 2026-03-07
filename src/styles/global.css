@@ -1,108 +1,63 @@
-:root {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color: #f8fafc;
-  background: linear-gradient(135deg, #0f172a, #111827 40%, #1d4ed8);
-}
-
-* {
-  box-sizing: border-box;
-}
+/* global.css — layout shell */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
   min-height: 100vh;
-}
-
-.container {
-  min-height: calc(100vh - 72px);
-  display: grid;
-  place-items: center;
-  padding: 1.5rem;
-}
-
-.auth-switch {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  padding-top: 1rem;
-}
-
-.auth-switch button {
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.65);
-  color: #bfdbfe;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-}
-
-.auth-switch button.active {
-  background: linear-gradient(90deg, #2563eb, #7c3aed);
-  color: #fff;
-}
-
-.card {
-  width: min(460px, 100%);
-  background: rgba(15, 23, 42, 0.88);
-  border: 1px solid rgba(96, 165, 250, 0.3);
-  border-radius: 20px;
-  padding: 2rem;
-  display: grid;
-  gap: 0.75rem;
-  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.5);
-}
-
-.card h1 {
-  margin: 0;
-  color: #93c5fd;
-}
-
-.card p {
-  margin-top: 0;
-  color: #cbd5e1;
-}
-
-.form-grid {
-  display: grid;
-  gap: 0.75rem;
-}
-
-input,
-select,
-button {
-  border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  padding: 0.8rem 1rem;
-  font-size: 1rem;
-}
-
-input,
-select {
-  background: rgba(30, 41, 59, 0.65);
+  font-family: 'Sora', system-ui, sans-serif;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(99,102,241,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(14,165,233,0.08) 0%, transparent 55%),
+    linear-gradient(160deg, #020817 0%, #0c1222 50%, #020817 100%);
   color: #f8fafc;
 }
 
-button {
-  background: linear-gradient(90deg, #2563eb, #7c3aed);
-  color: white;
-  border: none;
-  font-weight: 700;
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Switch tabs ─────────────────────────────────────────────── */
+.auth-tabs {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 1rem 0;
+  gap: 0.25rem;
+}
+
+.auth-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: rgba(15, 23, 42, 0.5);
+  color: rgba(148, 163, 184, 0.7);
+  font-family: 'Sora', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 180ms ease;
+  letter-spacing: 0.02em;
 }
 
-button:disabled {
-  opacity: 0.8;
-  cursor: not-allowed;
-}
-
-.hint {
+.auth-tab:hover {
+  border-color: rgba(148, 163, 184, 0.3);
   color: #cbd5e1;
 }
 
-.success {
-  color: #22c55e;
+.auth-tab.active {
+  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(99,102,241,0.25));
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #93c5fd;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.15);
 }
 
-.error {
-  color: #f87171;
+.auth-container {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem 1rem 3rem;
 }

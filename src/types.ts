@@ -19,6 +19,22 @@ export interface UserRegistrationResponse {
   createdAt: string
 }
 
+export interface LoginRequest {
+  identifier: string
+  password: string
+  twoFactorCode?: string
+  twoFactorSessionToken?: string
+}
+
+export interface LoginResponse {
+  twoFactorRequired: boolean
+  twoFactorSessionToken: string | null
+  accessToken: string | null
+  refreshToken: string | null
+  accessTokenExpiresInSeconds: number
+  refreshTokenExpiresInSeconds: number
+}
+
 export interface ApiErrorResponse {
   status: number
   error: string
@@ -27,49 +43,10 @@ export interface ApiErrorResponse {
   timestamp: string
 }
 
-export interface LoginRequest {
-  identifier: string
-  password: string
-}
-
-export interface LoginTokens {
+export interface AuthSession {
   accessToken: string
   refreshToken: string
-  expiresIn: number
-  refreshExpiresIn: number
-}
-
-export interface LoginUser {
-  id: string
-  name: string
-  email: string
-  phone: string
-  accountType: AccountType
-}
-
-export interface LoginResponse {
-  message: string
-  requiresTwoFactor: boolean
-  temporarySessionToken?: string
-  tokens?: LoginTokens
-  user?: LoginUser
-  redirectTo?: string
-  loginAttemptId?: string
-}
-
-export interface TwoFactorVerifyRequest {
-  temporarySessionToken: string
-  code: string
-}
-
-export interface LoginStatusResponse {
-  remainingAttempts: number
-  isLocked: boolean
-  lockUntil: string | null
-  retryAfterSeconds: number
-}
-
-export interface LoginAuditMetadata {
-  ipAddress?: string
-  userAgent?: string
+  accessTokenExpiresInSeconds: number
+  refreshTokenExpiresInSeconds: number
+  savedAt: string
 }

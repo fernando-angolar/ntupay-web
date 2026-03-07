@@ -1,23 +1,40 @@
-import type { LoginTokens, LoginUser } from '../types'
+import type { AuthSession, LoginResponse } from '../types'
 
-const AUTH_STORAGE_KEY = 'ntupay.auth.session'
+const AUTH_KEY = 'ntupay.auth.session'
 
-interface AuthSession {
-  tokens: LoginTokens
-  user: LoginUser
-  createdAt: string
-}
+export function saveAuthSession(response: LoginResponse): void {
+  if (!response.accessToken || !response.refreshToken) return
 
-export function saveAuthSession(tokens: LoginTokens, user: LoginUser): void {
-  const payload: AuthSession = {
-    tokens,
-    user,
-    createdAt: new Date().toISOString(),
+  const session: AuthSession = {
+    accessToken: response.accessToken,
+    refreshToken: response.refreshToken,
+    accessTokenExpiresInSeconds: response.accessTokenExpiresInSeconds,
+    refreshTokenExpiresInSeconds: response.refreshTokenExpiresInSeconds,
+    savedAt: new Date().toISOString(),
   }
 
-  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(payload))
+  localStorage.setItem(AUTH_KEY, JSON.stringify(session))
+}
+
+export function getAuthSession(): AuthSession | null {
+  const raw = localStorage.getItem(AUTH_KEY)
+  if (!raw) return null
+  try {
+    return JSON.parse(raw) as AuthSession
+  } catch {
+    return null
+  }
 }
 
 export function clearAuthSession(): void {
-  localStorage.removeItem(AUTH_STORAGE_KEY)
+  localStorage.removeItem(AUTH_KEY)
+}
+
+export function isSessionValid(): boolean {
+  const session = getAuthSession()
+  if (!session) return false
+
+  const savedAt = new Date(session.savedAt).getTime()
+  const expiresAt = savedAt + session.accessTokenExpiresInSeconds * 1000
+  return Date.now() < expiresAt
 }
