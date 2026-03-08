@@ -1,78 +1,118 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import ForgotPasswordForm from '../components/ForgotPasswordForm'
+import LoginForm from '../components/LoginForm'
+import RegisterForm from '../components/RegisterForm'
+import ResetPasswordForm from '../components/ResetPasswordForm'
+import '../styles/global.css'
+
+
+type View = 'login' | 'register' | 'forgotPassword' | 'resetPassword'
+
+function parseRoute(pathname: string): { view: View; token: string | null } {
+  const resetMatch = pathname.match(/^\/reset-password\/([^/]+)$/)
+
+  if (resetMatch) {
+    return {
+      view: 'resetPassword',
+      token: decodeURIComponent(resetMatch[1]),
+    }
+  }
+
 // import { useState } from 'react'
 // import LoginForm from '../components/LoginForm'
 // import RegisterForm from '../components/RegisterForm'
-// import '../styles/global.css'
+// import "../styles/global.css";
+    if (pathname === '/forgot-password') {
+    return { view: 'forgotPassword', token: null }
+  }
 
-// type View = 'login' | 'register'
-
-// export function AuthPage() {
-//   const [view, setView] = useState<View>('login')
-
-//   return (
-//     <div className="auth-layout">
-//       <nav className="auth-tabs">
-//         <button
-//           type="button"
-//           className={`auth-tab ${view === 'login' ? 'active' : ''}`}
-//           onClick={() => setView('login')}
-//         >
-//           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-//             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
-//           </svg>
-//           Entrar
-//         </button>
-//         <button
-//           type="button"
-//           className={`auth-tab ${view === 'register' ? 'active' : ''}`}
-//           onClick={() => setView('register')}
-//         >
-//           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-//             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
-//           </svg>
-//           Criar conta
-//         </button>
-//       </nav>
-
-//       <main className="auth-container">
-//         {view === 'login' ? <LoginForm /> : <RegisterForm />}
-//       </main>
-//     </div>
-//   )
-// }
-
-import { useState } from 'react'
-import LoginForm from '../components/LoginForm'
-import RegisterForm from '../components/RegisterForm'
-import "../styles/global.css";
-
-type View = "login" | "register"
+// type View = "login" | "register"
+  return { view: 'login', token: null }
+}
 
 export function AuthPage() {
-  const [view, setView] = useState<View>("login")
+  // const [view, setView] = useState<View>("login")
+    const initialRoute = useMemo(() => parseRoute(window.location.pathname), [])
+  const [view, setView] = useState<View>(initialRoute.view)
+  const [resetToken, setResetToken] = useState<string | null>(initialRoute.token)
+
+  const navigate = useCallback((nextView: View, token: string | null = null) => {
+    const path =
+      nextView === 'forgotPassword'
+        ? '/forgot-password'
+        : nextView === 'resetPassword' && token
+          ? `/reset-password/${encodeURIComponent(token)}`
+          : '/'
+
+    window.history.pushState({}, '', path)
+    setView(nextView)
+    setResetToken(token)
+  }, [])
+
+  useEffect(() => {
+    const onPopState = () => {
+      const route = parseRoute(window.location.pathname)
+      setView(route.view)
+      setResetToken(route.token)
+    }
+
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
 
   return (
     <div className="auth-layout">
-      
-      <nav className="auth-tabs">
+
+      {/* <nav className="auth-tabs">
         <button
           type="button"
           className={`auth-tab ${view === "login" ? "active" : ""}`}
           onClick={() => setView("login")}
         >
           Entrar
-        </button>
+        </button> */}
+        {(view === 'login' || view === 'register') && (
+        <nav className="auth-tabs">
+          <button
+            type="button"
+            className={`auth-tab ${view === 'login' ? 'active' : ''}`}
+            onClick={() => navigate('login')}
+          >
+            Entrar
+          </button>
 
-        <button
+        {/* <button
           type="button"
           className={`auth-tab ${view === "register" ? "active" : ""}`}
           onClick={() => setView("register")}
         >
           Criar conta
         </button>
-      </nav>
+      </nav> */}
+      <button
+            type="button"
+            className={`auth-tab ${view === 'register' ? 'active' : ''}`}
+            onClick={() => navigate('register')}
+          >
+            Criar conta
+          </button>
+        </nav>
+      )}
 
       <div className="auth-container">
-        {view === "login" ? <LoginForm /> : <RegisterForm />}
+        {/* {view === "login" ? <LoginForm /> : <RegisterForm />} */}
+        {view === 'login' && <LoginForm onForgotPassword={() => navigate('forgotPassword')} />}
+        {view === 'register' && <RegisterForm />}
+        {view === 'forgotPassword' && (
+          <ForgotPasswordForm onBackToLogin={() => navigate('login')} />
+        )}
+        {view === 'resetPassword' && resetToken && (
+          <ResetPasswordForm
+            token={resetToken}
+            onBackToRequest={() => navigate('forgotPassword')}
+            onBackToLogin={() => navigate('login')}
+          />
+        )}
       </div>
 
     </div>

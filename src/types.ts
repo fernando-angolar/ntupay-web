@@ -35,6 +35,26 @@ export interface LoginResponse {
   refreshTokenExpiresInSeconds: number
 }
 
+export interface PasswordResetRequest {
+  email: string
+}
+
+export interface PasswordResetResponse {
+  message: string
+}
+
+export interface ResetPasswordTokenValidationResponse {
+  valid: boolean
+  expiresAt?: string
+  message?: string
+}
+
+export interface CompletePasswordResetRequest {
+  token: string
+  newPassword: string
+  confirmPassword: string
+}
+
 export interface ApiErrorResponse {
   status: number
   error: string
