@@ -323,7 +323,7 @@
 import { useRef, useState } from 'react'
 import { loginUser, verifyTwoFactor } from '../api/userApi'
 import { saveAuthSession } from '../utils/authStorage'
-import '../styles/authForms.css'
+import '../styles/AuthForms.css'
 
 const MAX_ATTEMPTS = 5
 

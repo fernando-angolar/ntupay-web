@@ -219,7 +219,7 @@
 import { useState } from 'react'
 import { registerUser } from '../api/userApi'
 import type { UserRegistrationRequest } from '../types'
-import '../styles/authForms.css'
+import '../styles/AuthForms.css'
 
 const EMPTY: UserRegistrationRequest = {
   name: '',
