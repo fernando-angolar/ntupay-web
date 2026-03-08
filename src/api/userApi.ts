@@ -1,12 +1,9 @@
 import { AxiosError } from "axios"
 import { api } from "./client"
 import type { 
-  ApiErrorResponse, 
-  LoginAuditMetadata,
+  ApiErrorResponse,
   LoginRequest,
   LoginResponse,
-  LoginStatusResponse,
-  TwoFactorVerifyRequest,
   UserRegistrationRequest, 
   UserRegistrationResponse,
 

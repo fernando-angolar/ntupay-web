@@ -1,63 +1,57 @@
-/* global.css — layout shell */
-*, *::before, *::after { box-sizing: border-box; }
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --primary: #6366f1;
+}
+
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  min-height: 100vh;
-  font-family: 'Sora', system-ui, sans-serif;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(99,102,241,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(14,165,233,0.08) 0%, transparent 55%),
-    linear-gradient(160deg, #020817 0%, #0c1222 50%, #020817 100%);
-  color: #f8fafc;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
+
+/* Layout */
 
 .auth-layout {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
-/* ── Switch tabs ─────────────────────────────────────────────── */
+/* Tabs */
+
 .auth-tabs {
   display: flex;
   justify-content: center;
-  padding: 1.5rem 1rem 0;
-  gap: 0.25rem;
+  gap: 1rem;
+  padding: 2rem 0 0 0;
 }
 
 .auth-tab {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1.25rem;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.15);
-  background: rgba(15, 23, 42, 0.5);
-  color: rgba(148, 163, 184, 0.7);
-  font-family: 'Sora', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 180ms ease;
-  letter-spacing: 0.02em;
-}
-
-.auth-tab:hover {
-  border-color: rgba(148, 163, 184, 0.3);
-  color: #cbd5e1;
+  padding: 0.5rem 1rem;
 }
 
 .auth-tab.active {
-  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(99,102,241,0.25));
-  border-color: rgba(99, 102, 241, 0.5);
-  color: #93c5fd;
-  box-shadow: 0 0 16px rgba(99, 102, 241, 0.15);
+  color: var(--text);
+  border-bottom: 2px solid var(--primary);
 }
 
+/* Container do formulário */
+
 .auth-container {
-  flex: 1;
   display: grid;
   place-items: center;
-  padding: 1.5rem 1rem 3rem;
+  padding: 2rem;
 }
