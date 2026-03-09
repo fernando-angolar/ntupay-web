@@ -43,11 +43,8 @@ export interface PasswordResetResponse {
   message: string
 }
 
-export interface ResetPasswordTokenValidationResponse {
-  valid: boolean
-  expiresAt?: string
-  message?: string
-}
+export type ResetPasswordTokenValidationResponse = PasswordResetResponse
+
 
 export interface CompletePasswordResetRequest {
   token: string

@@ -5,7 +5,6 @@ import RegisterForm from '../components/RegisterForm'
 import ResetPasswordForm from '../components/ResetPasswordForm'
 import '../styles/global.css'
 
-
 type View = 'login' | 'register' | 'forgotPassword' | 'resetPassword'
 
 function parseRoute(pathname: string): { view: View; token: string | null } {
@@ -18,21 +17,15 @@ function parseRoute(pathname: string): { view: View; token: string | null } {
     }
   }
 
-// import { useState } from 'react'
-// import LoginForm from '../components/LoginForm'
-// import RegisterForm from '../components/RegisterForm'
-// import "../styles/global.css";
-    if (pathname === '/forgot-password') {
+  if (pathname === '/forgot-password') {
     return { view: 'forgotPassword', token: null }
   }
 
-// type View = "login" | "register"
   return { view: 'login', token: null }
 }
 
 export function AuthPage() {
-  // const [view, setView] = useState<View>("login")
-    const initialRoute = useMemo(() => parseRoute(window.location.pathname), [])
+  const initialRoute = useMemo(() => parseRoute(window.location.pathname), [])
   const [view, setView] = useState<View>(initialRoute.view)
   const [resetToken, setResetToken] = useState<string | null>(initialRoute.token)
 
@@ -62,16 +55,7 @@ export function AuthPage() {
 
   return (
     <div className="auth-layout">
-
-      {/* <nav className="auth-tabs">
-        <button
-          type="button"
-          className={`auth-tab ${view === "login" ? "active" : ""}`}
-          onClick={() => setView("login")}
-        >
-          Entrar
-        </button> */}
-        {(view === 'login' || view === 'register') && (
+      {(view === 'login' || view === 'register') && (
         <nav className="auth-tabs">
           <button
             type="button"
@@ -80,16 +64,7 @@ export function AuthPage() {
           >
             Entrar
           </button>
-
-        {/* <button
-          type="button"
-          className={`auth-tab ${view === "register" ? "active" : ""}`}
-          onClick={() => setView("register")}
-        >
-          Criar conta
-        </button>
-      </nav> */}
-      <button
+          <button
             type="button"
             className={`auth-tab ${view === 'register' ? 'active' : ''}`}
             onClick={() => navigate('register')}
@@ -100,8 +75,9 @@ export function AuthPage() {
       )}
 
       <div className="auth-container">
-        {/* {view === "login" ? <LoginForm /> : <RegisterForm />} */}
-        {view === 'login' && <LoginForm onForgotPassword={() => navigate('forgotPassword')} />}
+        {view === 'login' && (
+          <LoginForm onForgotPassword={() => navigate('forgotPassword')} />
+        )}
         {view === 'register' && <RegisterForm />}
         {view === 'forgotPassword' && (
           <ForgotPasswordForm onBackToLogin={() => navigate('login')} />
@@ -114,7 +90,6 @@ export function AuthPage() {
           />
         )}
       </div>
-
     </div>
   )
 }

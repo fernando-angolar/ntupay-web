@@ -66,7 +66,7 @@ export async function requestPasswordReset(
   payload: PasswordResetRequest,
 ): Promise<PasswordResetResponse> {
   try {
-    const response = await api.post<PasswordResetResponse>('/users/password-reset/request', payload)
+    const response = await api.post<PasswordResetResponse>('/users/password-recovery-requests', payload)
     return response.data
   } catch (error) {
     throw extractApiError(error, 'Não foi possível processar o pedido de recuperação')
@@ -78,7 +78,7 @@ export async function validatePasswordResetToken(
 ): Promise<ResetPasswordTokenValidationResponse> {
   try {
     const response = await api.get<ResetPasswordTokenValidationResponse>(
-      `/users/password-reset/${token}/validate`,
+      `/users/password-recovery/${encodeURIComponent(token)}`,
     )
     return response.data
   } catch (error) {
@@ -90,7 +90,11 @@ export async function completePasswordReset(
   payload: CompletePasswordResetRequest,
 ): Promise<PasswordResetResponse> {
   try {
-    const response = await api.post<PasswordResetResponse>('/users/password-reset/complete', payload)
+    const { token, newPassword, confirmPassword } = payload
+    const response = await api.post<PasswordResetResponse>(
+      `/users/password-recovery/${encodeURIComponent(token)}/reset`,
+      { newPassword, confirmPassword },
+    )
     return response.data
   } catch (error) {
     throw extractApiError(error, 'Não foi possível atualizar a senha')
